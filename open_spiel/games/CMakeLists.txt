@@ -90,6 +90,8 @@ set(GAME_SOURCES
   pig.h
   quoridor.cc
   quoridor.h
+  setback.cc
+  setback.h
   skat.cc
   skat.h
   stones_and_gems.cc
@@ -354,6 +356,11 @@ add_test(pig_test pig_test)
 add_executable(quoridor_test quoridor_test.cc ${OPEN_SPIEL_OBJECTS}
                $<TARGET_OBJECTS:tests>)
 add_test(quoridor_test quoridor_test)
+
+add_executable(setback_test setback_test.cc ${OPEN_SPIEL_OBJECTS}
+               $<TARGET_OBJECTS:tests>
+               $<TARGET_OBJECTS:algorithms>)
+add_test(setback setback_test)
 
 add_executable(skat_test skat_test.cc ${OPEN_SPIEL_OBJECTS}
                $<TARGET_OBJECTS:tests>)

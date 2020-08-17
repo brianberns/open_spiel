@@ -83,6 +83,7 @@ class PyspielTest(absltest.TestCase):
         "pig",
         "quoridor",
         "repeated_game",
+        "setback",
         "skat",
         "start_at",
         "stones_and_gems",
