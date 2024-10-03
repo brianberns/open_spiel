@@ -25,7 +25,7 @@ from open_spiel.python.pytorch import deep_cfr
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_integer("num_iterations", 400, "Number of iterations")
+flags.DEFINE_integer("num_iterations", 1000, "Number of iterations")
 flags.DEFINE_integer("num_traversals", 40, "Number of traversals/games")
 flags.DEFINE_string("game_name", "kuhn_poker", "Name of the game")
 
@@ -36,14 +36,17 @@ def main(unused_argv):
 
   deep_cfr_solver = deep_cfr.DeepCFRSolver(
       game,
-      policy_network_layers=(32, 32),
+      policy_network_layers=(16, 16),
       advantage_network_layers=(16, 16),
       num_iterations=FLAGS.num_iterations,
       num_traversals=FLAGS.num_traversals,
       learning_rate=1e-3,
-      batch_size_advantage=None,
-      batch_size_strategy=None,
-      memory_capacity=int(1e7))
+      batch_size_advantage=128,
+      batch_size_strategy=1024,
+      memory_capacity=int(1e7),
+      policy_network_train_steps=400,
+      advantage_network_train_steps=20,
+      reinitialize_advantage_networks=False)
 
   _, advantage_losses, policy_loss = deep_cfr_solver.solve()
   for player, losses in advantage_losses.items():
@@ -63,9 +66,9 @@ def main(unused_argv):
 
   average_policy_values = expected_game_score.policy_value(
       game.new_initial_state(), [average_policy] * 2)
-  logging.info("Computed player 0 value: %.2f (expected: %.2f).",
+  logging.info("Computed player 0 value: %.5f (expected: %.5f).",
                average_policy_values[0], -1 / 18)
-  logging.info("Computed player 1 value: %.2f (expected: %.2f).",
+  logging.info("Computed player 1 value: %.5f (expected: %.5f).",
                average_policy_values[1], 1 / 18)
 
 
